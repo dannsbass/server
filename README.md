@@ -12,4 +12,4 @@ cd server
 nodemon carihadis-server.php
 ```
 
-Pastikan `npm` dan `php` telah terinstal di sistem.
+Pastikan `npm`, `nodemon` dan `php` telah terinstal di sistem.
