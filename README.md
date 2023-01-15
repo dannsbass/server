@@ -7,6 +7,7 @@ Ini adalah aplikasi pencari hadis menggunakan ReactPHP sebagai server.
 Buka terminal Linux, lalu ketik perintah:
 
 ```bash
+sh install.sh
 cd server
 nodemon carihadis-server.php
 ```
