@@ -1,6 +1,6 @@
 # Aplikasi CariHadis dengan Server ReactPHP
 
-Ini adalah aplikasi pencari hadis menggunakan ReactPHP sebagai server.
+Ini adalah aplikasi pencari hadis menggunakan [ReactPHP](https://reactphp.org) sebagai server.
 
 ## Cara penggunaan
 
