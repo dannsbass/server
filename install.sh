@@ -1,4 +1,4 @@
 cd dannsbass
 unzip '*.zip'
-rm db db-per-hadis kosakata tmp
+rm db.zip db-per-hadis.zip kosakata.zip tmp.zip
 cd ..
