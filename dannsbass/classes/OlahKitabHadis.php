@@ -85,7 +85,7 @@ class OlahKitabHadis
                 echo "$kitab$i berhasil diproses\n";
                 
             }
-            echo "$kitab selesai diproses\n"; exit;
+            echo "$kitab selesai diproses\n";
         }
     }
 
