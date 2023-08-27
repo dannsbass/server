@@ -67,6 +67,8 @@ class OlahKitabHadis
                     // bersihkan selain huruf dan spasi
                     //    $kata = preg_replace('/[^a-zA-Z\s]/', '', trim($kata));
                     $kata = preg_replace('/[^\p{Arabic}]/u', '', trim($kata));
+                    $find = array("َ","ِ","ُ","ً","ٍ","ٌ","ْ","ّ");
+                    $kata = str_replace($find,"",$kata);
                     if (empty($kata)) continue;
                     $item = "$nokitab:$nohadis";
                     $tmp = "$tmpdir/$kata";
