@@ -28,8 +28,10 @@ class CariHadis
         }
 
         $hasil_pencarian = '';
+        $kata2 = explode(' ', preg_replace('/[^a-z\s]/', '', strtolower($this->q)));
+        $jumlah_kata2 = count($kata2);
 
-        foreach (explode(' ', preg_replace('/[^a-z\s]/', '', strtolower($this->q))) as $kata) {
+        foreach ($kata2 as $kata) {
             $file = "{$this->dir_kosakata}/" . $kata;
             if (self::fileExists($file, false)) {
                 $hasil_pencarian .= file_get_contents($file);
@@ -43,14 +45,22 @@ class CariHadis
             $ok = true;
             $index_daftar_hasil_pencarian = array_count_values(explode(' ', trim($hasil_pencarian)));
             array_multisort($index_daftar_hasil_pencarian, SORT_DESC);
-            $hasil = $index_daftar_hasil_pencarian;
+            foreach (array_values($index_daftar_hasil_pencarian) as $value) {
+                if ($value == $jumlah_kata2) {
+                    break;
+                }
+                $jumlah_kata2--;
+            }
+            $hasil = array_filter($index_daftar_hasil_pencarian, function($v)use($jumlah_kata2){return $v == $jumlah_kata2;});
         }
 
         $respon = [
             'ok'        => $ok,
             'query'     => $this->q,
             'durasi'    => (microtime(true) - $this->awal),
-            'hasil'     => $hasil,
+            'format'    => 'kode_kitab:nomor_hadis:jumlah_kata_yang_ditemukan',
+            'kode_kitab' => array_combine(array_keys(DaftarKitabHadis::MATAN_TERJEMAH), array_values(DaftarKitabHadis::MATAN_TERJEMAH)),
+            'hasil_pencarian'     => $hasil,
         ];
 
         return json_encode(
@@ -76,7 +86,7 @@ class CariHadis
                     'nama_kitab'    => $kitab,
                     'jumlah_item'  => (int)trim(file_get_contents("$this->dir_jumlah_hadis/$kitab")),
                 ];
-            }else{
+            } else {
                 $hasil = 'Nama kitab tidak dikenal';
             }
         } else {
@@ -115,21 +125,21 @@ class CariHadis
     /**
      * Mengecek keberadaan file secara case-insensitive
      */
-    public static function fileExists($fileName, $caseSensitive = true) {
+    public static function fileExists($fileName, $caseSensitive = true)
+    {
 
-        if(file_exists($fileName)) {
+        if (file_exists($fileName)) {
             return $fileName;
         }
-        if($caseSensitive) return false;
-    
+        if ($caseSensitive) return false;
+
         // Handle case insensitive requests            
         $directoryName = dirname($fileName);
-        foreach(glob($fileName, GLOB_NOSORT) as $file) {
-            if(strtolower($file) == strtolower($fileName)) {
+        foreach (glob($fileName, GLOB_NOSORT) as $file) {
+            if (strtolower($file) == strtolower($fileName)) {
                 return $file;
             }
         }
         return false;
     }
-
 }
