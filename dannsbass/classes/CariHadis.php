@@ -29,8 +29,8 @@ class CariHadis
         }
 
         $hasil_pencarian = '';
-        $kata2 = explode(' ', preg_replace('/[^\p{Arabic}|^a-z\s]/u', '', strtolower($this->q)));
-        $jumlah_kata2 = count(array_filter($kata2));
+        $kata2 = array_filter(explode(' ', preg_replace('/[^\p{Arabic}|^a-z\s]/u', '', strtolower($this->q))));
+        $jumlah_kata2 = count($kata2);
 
         foreach ($kata2 as $kata) {
             $file = "{$this->dir_kosakata}/" . $kata;
