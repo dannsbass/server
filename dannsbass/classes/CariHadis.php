@@ -24,11 +24,13 @@ class CariHadis
     public function cariKata(string $q = '')
     {
         if (!empty($q)) {
-            $this->q = $q;
+            $find = array("َ","ِ","ُ","ً","ٍ","ٌ","ْ","ّ");
+            $this->q = str_replace($find,"",$q);
         }
 
         $hasil_pencarian = '';
-        $kata2 = explode(' ', preg_replace('/[^\p{Arabic}|^a-z\s]/u', '', strtolower($this->q)));        $jumlah_kata2 = count($kata2);
+        $kata2 = explode(' ', preg_replace('/[^\p{Arabic}|^a-z\s]/u', '', strtolower($this->q)));
+        $jumlah_kata2 = count(array_filter($kata2));
 
         foreach ($kata2 as $kata) {
             $file = "{$this->dir_kosakata}/" . $kata;
