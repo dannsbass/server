@@ -24,18 +24,24 @@ class CariHadis
     public function cariKata(string $q = '')
     {
         if (!empty($q)) {
-            $find = array("َ","ِ","ُ","ً","ٍ","ٌ","ْ","ّ");
-            $this->q = str_replace($find,"",$q);
+          $find = array("َ","ِ","ُ","ً","ٍ","ٌ","ْ","ّ");
+          $q = str_replace($find,"",$q);
+            $this->q = $q;
         }
 
         $hasil_pencarian = '';
         $kata2 = array_filter(explode(' ', preg_replace('/[^\p{Arabic}|^a-z\s]/u', '', strtolower($this->q))));
         $jumlah_kata2 = count($kata2);
 
-        foreach ($kata2 as $kata) {
+      $kata2_ditemukan = [];  
+      $kata2_tak_ditemukan = [];  
+      foreach ($kata2 as $kata) {
             $file = "{$this->dir_kosakata}/" . $kata;
             if (self::fileExists($file, false)) {
+              $kata2_ditemukan[] = $kata;
                 $hasil_pencarian .= file_get_contents($file);
+            }else{
+              $kata2_tak_ditemukan[] = $kata;
             }
         }
 
@@ -47,24 +53,22 @@ class CariHadis
             $index_daftar_hasil_pencarian = array_count_values(explode(' ', trim($hasil_pencarian)));
             array_multisort($index_daftar_hasil_pencarian, SORT_DESC);
             foreach (array_values($index_daftar_hasil_pencarian) as $value) {
-                if ($value == $jumlah_kata2) break;
+                if ($value == $jumlah_kata2) {
+                    break;
+                }
                 $jumlah_kata2--;
             }
             $hasil = array_filter($index_daftar_hasil_pencarian, function($v)use($jumlah_kata2){return $v == $jumlah_kata2;});
         }
 
-        // $kode_kitab = '';
-        // foreach (DaftarKitabHadis::MATAN_TERJEMAH as $key => $value) {
-        //     $kode_kitab .= "$key. $value";
-        //     $kode_kitab .= count(DaftarKitabHadis::MATAN_TERJEMAH) == ($key + 1) ? '' : ', ';
-        // }
-
         $respon = [
             'ok'        => $ok,
             'query'     => $this->q,
+          'kata_ditemukan' => array_unique($kata2_ditemukan),
+          'kata_tak_ditemukan' => array_unique($kata2_tak_ditemukan),
             'durasi'    => (microtime(true) - $this->awal),
-            // 'kode_kitab' => $kode_kitab,
-            // 'format_hasil_pencarian'    => 'kode_kitab:nomor_hadis:jumlah_kata_yang_ditemukan',
+            'format'    => 'kode_kitab:nomor_hadis:jumlah_kata_yang_ditemukan',
+            'kode_kitab' => array_combine(array_keys(DaftarKitabHadis::MATAN_TERJEMAH), array_values(DaftarKitabHadis::MATAN_TERJEMAH)),
             'hasil_pencarian'     => $hasil,
         ];
 
