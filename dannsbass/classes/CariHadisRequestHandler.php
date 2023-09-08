@@ -19,7 +19,7 @@ class CariHadisRequestHandler
     {
         $queryParams = $this->request->getQueryParams();
 
-        $body = '<form>Teks: <input type="text" name="q">';
+        $body = '<form name="carihadis" method="get">Teks: <input type="text" name="q">';
         $body .= '<input type="submit" name="submit" value="Cari"></form><br>';
         $body .= '<h3>Kode kitab:</h3>';
         
