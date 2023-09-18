@@ -19,7 +19,7 @@ class CariHadisRequestHandler
     {
         $queryParams = $this->request->getQueryParams();
 
-        $body = '<form name="carihadis" method="get">Teks: <input type="text" name="q">';
+        $body = '<form>Teks: <input type="text" name="q">';
         $body .= '<input type="submit" name="submit" value="Cari"></form><br>';
         $body .= '<h3>Kode kitab:</h3>';
         
@@ -31,8 +31,7 @@ class CariHadisRequestHandler
 
         if (isset($queryParams['q'])) {
             $header = ['Content-type' => 'application/json'];
-            $q = htmlspecialchars($queryParams['q']);
-            $body = (new CariHadis())->cariKata($q);
+            $body = (new CariHadis())->cariKata(html_entity_decode(urldecode($queryParams['q'])));
         }
 
         if (isset($queryParams['kitab'])) {
